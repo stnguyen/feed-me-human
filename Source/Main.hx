@@ -25,6 +25,7 @@ class Main extends Sprite {
         var board = Board.random();
         trace('randomized board: $board');
         var boardSprite = new BoardSprite(board);
+        boardSprite.scaleX = boardSprite.scaleY = 0.98 * stage.stageWidth / boardSprite.width;
         boardSprite.x = (stage.stageWidth - boardSprite.width) / 2;
         boardSprite.y = stage.stageHeight - boardSprite.height;
         addChild(boardSprite);
