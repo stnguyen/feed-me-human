@@ -6,6 +6,11 @@ class Board {
     public static inline var NumRows = 10;
     public static inline var NumCols = 10;
 
+    struct Coordinate {
+        var row:Int;
+        var col:Int;
+    }
+
     var cellColors:Vector<Vector<CellColor>>;
 
     public function new() {
@@ -21,7 +26,7 @@ class Board {
     }
 
     public function tryBlast(row:Int, col:Int):Bool {
-        var color = cellColors[row][col];
+        var connectedCells = floodFill(row, col);
         return false;
     }
 
@@ -58,4 +63,8 @@ class Board {
             throw 'Invalid board coordinate: $row, $col';
         }
     }
+
+    // function floodFill(row:Int, col:Int):Array<Coordinate> {
+    //     new 
+    // }
 }
