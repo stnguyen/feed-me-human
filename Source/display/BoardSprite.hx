@@ -1,4 +1,4 @@
-package;
+package display;
 
 import core.*;
 import openfl.display.*;

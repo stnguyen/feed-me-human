@@ -1,4 +1,4 @@
-package;
+package display;
 
 import openfl.events.MouseEvent;
 import openfl.display.*;
@@ -6,7 +6,7 @@ import openfl.Assets;
 import core.*;
 import persistence.*;
 
-class Main extends Sprite {
+class GameplayScreen extends Sprite {
     static var BOARD_WIDTH_COVERAGE = 0.99;
 
     var board:Board;
