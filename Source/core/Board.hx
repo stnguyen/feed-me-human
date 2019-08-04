@@ -26,21 +26,35 @@ class Board {
         }
     }
     
+    /**
+        Override board state with the new one
+    **/
     public function load(cellColors:Vector<Vector<CellColor>>) {
         for (r in 0...NUM_ROWS) {
             this.cellColors[r] = cellColors[r].copy();
         }
     }
 
+    /**
+        Check if given row and col make a valid coordinate
+    **/
     public function isValidCoordinate(row:Int, col:Int):Bool {
         return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
     }
 
+    /**
+        Get current color of the cell at given coordinate
+    **/
     public function getCellColor(row:Int, col:Int):CellColor {
         validateCoordinate(row, col);
         return cellColors[row][col];
     }
 
+    /**
+        Try blast the cell at given coordinate and its neighbors of the same color.
+        
+        Also collapse the board.
+    **/
     public function tryBlast(row:Int, col:Int):Bool {
         validateCoordinate(row, col);
 
@@ -75,6 +89,9 @@ class Board {
         return buffer.toString();
     }
 
+    /**
+        Generate a random board with uniform distribution of colors
+    **/
     public static function random():Board {
         var board = new Board();
 
@@ -90,7 +107,9 @@ class Board {
         return board;
     }
 
-    /** Find connected (same color) cells with the given cell coordinate **/
+    /**
+        Find cells of the same color with and include the given coordinate
+    **/
     function floodFill(row:Int, col:Int):Array<Coordinate> {
         var color = cellColors[row][col];
         var connectedCoors = new Array<Coordinate>();
@@ -122,7 +141,9 @@ class Board {
         return connectedCoors;
     }
     
-    /** Collapse the board, remove empty columns (shift left), in linear time **/
+    /**
+        Collapse the board down and remove empty columns by shifting left
+    **/
     function collapse(blastingCoorLookup:Map<Int, Bool>) {
         // First, collapse down
         for (c in 0...NUM_COLS) {
@@ -170,10 +191,18 @@ class Board {
         }
     }
 
+    /**
+        Calculate (unique) hash code for the given coordinate
+    **/
     function hashCoordinate(row:Int, col:Int):Int {
         return row * HASH_ROW_MULTIPLIER + col;
     }
 
+    /**
+        Validate the given coordinate
+        
+        @throws exception if failed
+    **/
     function validateCoordinate(row:Int, col:Int) {
         if (!isValidCoordinate(row, col)) throw 'Invalid board coordinate: $row, $col';
     }
