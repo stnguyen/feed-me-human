@@ -2,8 +2,6 @@ package core;
 
 import haxe.ds.Vector;
 
-typedef Coordinate = { row:Int, col:Int }
-
 /**
     Board state
 
@@ -15,6 +13,9 @@ class Board {
 
     static var HASH_ROW_MULTIPLIER = 100;
     static var NEIGHBOR_DELTAS = [ [0,1], [0,-1], [1, 0], [-1, 0] ];
+    
+    public var onCellRemoved = new Observable<Coordinate>();
+    public var onCellMoved = new Observable<{ from:Coordinate, to:Coordinate }>();
     
     var cellColors:Vector<Vector<CellColor>>;
 
@@ -40,8 +41,8 @@ class Board {
 
         var blastingCoorLookup = new Map<Int, Bool>();
         for (coor in blastingCoors) {
-            // TODO notify removal
             blastingCoorLookup.set(hashCoordinate(coor.row, coor.col), true);
+            onCellRemoved.notify(coor);
         }
 
         collapse(blastingCoorLookup);
@@ -123,9 +124,13 @@ class Board {
                     numCollapsed++;
                     cellColors[r][c] = CellColor.Empty;
                 } else if (numCollapsed > 0) {
-                    // TODO notify cell movement
                     cellColors[r + numCollapsed][c] = cellColors[r][c];
                     cellColors[r][c] = CellColor.Empty;
+                    
+                    onCellMoved.notify({
+                        from: { row: r, col: c },
+                        to: { row: r + numCollapsed, col: c },
+                    });
                 }
             }
         }

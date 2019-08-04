@@ -12,6 +12,9 @@ class BoardSprite extends Sprite {
     public function new(board:Board) {
         super();
         this.board = board;
+        
+        board.onCellRemoved.addObserver(handleCellRemoved);
+        board.onCellMoved.addObserver(handleCellMoved);
 
         createCells();
     }
@@ -37,5 +40,19 @@ class BoardSprite extends Sprite {
 
     function cellFileName(cellColor:CellColor) {
         return 'assets/cell-${cellColor.getName().toLowerCase()}.png';
+    }
+    
+    function handleCellRemoved(coor:Coordinate) {
+        var bitmap = cells[coor.row][coor.col];
+        removeChild(bitmap);
+        cells[coor.row][coor.col] = null;
+    }
+
+    function handleCellMoved(movement:{ from:Coordinate, to:Coordinate }) {
+        var bitmap = cells[movement.from.row][movement.from.col];
+        bitmap.x = bitmap.width * movement.to.col;
+        bitmap.y = bitmap.height * movement.to.row;
+        cells[movement.to.row][movement.to.col] = bitmap;
+        cells[movement.from.row][movement.from.col] = null;
     }
 }
