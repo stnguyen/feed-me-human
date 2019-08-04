@@ -3,11 +3,11 @@ package persistence;
 import core.*;
 import openfl.net.SharedObject;
 
-class LocalStorage implements IStorage {
+class SharedObjectStorage implements IStorage {
     var so:SharedObject;
 
     public function new() {
-        so = SharedObject.getLocal("LocalStorage");
+        so = SharedObject.getLocal("SharedObjectStorage");
     }
 
     public function getSavedBoard():Board {
