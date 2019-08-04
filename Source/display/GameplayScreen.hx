@@ -12,6 +12,7 @@ class GameplayScreen extends Screen {
 
     var board:Board;
     var boardSprite:BoardSprite;
+    var gameOver = false;
 
     public function new() {
         super();
@@ -37,6 +38,8 @@ class GameplayScreen extends Screen {
     }
 
     function handleMouseClick(event:MouseEvent) {
+        if (gameOver) return;
+
         var localX = event.stageX - boardSprite.x;
         var localY = event.stageY - boardSprite.y;
         var row = Math.floor((localY / boardSprite.fullHeight) * Board.NUM_ROWS);
@@ -44,7 +47,12 @@ class GameplayScreen extends Screen {
         if (board.isValidCoordinate(row, col)) {
             if (board.tryBlast(row, col)) {
                 trace('board: $board');
-                StorageManager.instance.storage.saveBoard(board);
+                if (board.isDeadEnd()) {
+                    StorageManager.instance.storage.saveBoard(null);
+                    handleDeadEnd();
+                } else {
+                    StorageManager.instance.storage.saveBoard(board);
+                }
             }
         }
     }
@@ -90,5 +98,16 @@ class GameplayScreen extends Screen {
     
     function handleExitClicked(event) {
         ScreenManager.instance.transitionToMainMenu();
+    }
+    
+    function handleDeadEnd() {
+        if (gameOver) return;
+
+        gameOver = true;
+
+        var bitmap = new Bitmap(Assets.getBitmapData("assets/gameover.png"));
+        bitmap.x = (stage.stageWidth - bitmap.width) / 2;
+        bitmap.y = (stage.stageHeight - bitmap.height) / 2;
+        addChild(bitmap);
     }
 }

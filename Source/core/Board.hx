@@ -74,6 +74,27 @@ class Board {
         return true;
     }
     
+    /**
+        Check if there is no blastable cell anymore
+    **/
+    public function isDeadEnd():Bool {
+        for (c in 0...NUM_COLS) {
+            for (rTopdown in 0...NUM_ROWS) {
+                var r = NUM_ROWS - rTopdown - 1;
+                if (cellColors[r][c] == CellColor.Empty) {
+                    if (r == NUM_ROWS - 1) {
+                        // No more columns to the right, dead-end!
+                        return true;
+                    } else break; // move on to the next column
+                }
+                if (floodFill(r, c).length > 1) return false;
+            }
+        }
+        
+        // All non-empty cells are not blastable, dead-end!
+        return true;
+    }
+    
     public function toString():String {
         var buffer = new StringBuf();
         for (r in 0...NUM_ROWS) {
