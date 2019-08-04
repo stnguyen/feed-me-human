@@ -34,7 +34,7 @@ class Board {
         validateCoordinate(row, col);
 
         var blastingCoors = floodFill(row, col);
-        trace('tryBlast($row, $col): color is ${cellColors[row][col]}, blasting: ${blastingCoors}');
+        trace('tryBlast($row, $col): color is ${cellColors[row][col]}, connected cells: ${blastingCoors}');
         
         if (blastingCoors.length < 2) return false;
 
@@ -75,14 +75,6 @@ class Board {
             }
         }
         return board;
-    }
-
-    function validateCoordinate(row:Int, col:Int) {
-        if (!isValidCoordinate(row, col)) throw 'Invalid board coordinate: $row, $col';
-    }
-
-    function isValidCoordinate(row:Int, col:Int):Bool {
-        return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
     }
 
     /** Find connected (same color) cells with the given cell coordinate **/
@@ -155,5 +147,13 @@ class Board {
 
     function hashCoordinate(row:Int, col:Int):Int {
         return row * HASH_ROW_MULTIPLIER + col;
+    }
+
+    function validateCoordinate(row:Int, col:Int) {
+        if (!isValidCoordinate(row, col)) throw 'Invalid board coordinate: $row, $col';
+    }
+
+    function isValidCoordinate(row:Int, col:Int):Bool {
+        return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
     }
 }
