@@ -4,30 +4,33 @@ import openfl.events.MouseEvent;
 import openfl.display.*;
 import openfl.Assets;
 import core.*;
-import persistence.*;
+import openfl.events.Event;
+import managers.*;
 
-class GameplayScreen extends Sprite {
+class GameplayScreen extends Screen {
     static var BOARD_WIDTH_COVERAGE = 0.99;
 
     var board:Board;
     var boardSprite:BoardSprite;
     var fullBoardWidth:Float;
     var fullBoardHeight:Float;
-    var storage:IStorage;
 
     public function new() {
         super();
         
-        storage = new LocalStorage();
-
+        addEventListener(Event.ADDED_TO_STAGE, added);
+    }
+    
+    function added(event) {
         createBackground();
         createCat();
+        createExitButton();
 
         startGame();
     }
     
     function startGame() {
-        board = storage.getSavedBoard();
+        board = StorageManager.instance.storage.getSavedBoard();
         if (board == null) board = Board.random();
 
         boardSprite = createBoardSprite(board);
@@ -46,7 +49,7 @@ class GameplayScreen extends Sprite {
         if (board.isValidCoordinate(row, col)) {
             if (board.tryBlast(row, col)) {
                 trace('board: $board');
-                storage.saveBoard(board);
+                StorageManager.instance.storage.saveBoard(board);
             }
         }
     }
@@ -73,5 +76,24 @@ class GameplayScreen extends Sprite {
         boardSprite.y = stage.stageHeight - boardSprite.height;
         addChild(boardSprite);
         return boardSprite;
+    }
+
+    function createExitButton() {
+        var filename = "assets/button-exit.png";
+        var up = new Bitmap(Assets.getBitmapData(filename));
+        var over = new Bitmap(Assets.getBitmapData(filename));
+        over.alpha = 0.9;
+        var down = new Bitmap(Assets.getBitmapData(filename));
+        down.alpha = 0.7;
+
+        var button = new SimpleButton(up, over, down, up);
+        button.x = 5;
+        button.y = 5;
+        button.addEventListener(MouseEvent.CLICK, handleExitClicked);
+        addChild(button);
+    }
+    
+    function handleExitClicked(event) {
+        ScreenManager.instance.transitionToMainMenu();
     }
 }

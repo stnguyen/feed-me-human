@@ -2,7 +2,7 @@
 <project>
 	
 	<meta title="FeedMeHuman" package="com.sample.feedmehuman" version="1.0.0" company="Company Name" />
-	<app main="display.GameplayScreen" path="Export" file="FeedMeHuman" />
+	<app main="Main" path="Export" file="FeedMeHuman" />
 	
 	<source path="Source" />
 	
