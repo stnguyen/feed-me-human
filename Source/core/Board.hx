@@ -26,6 +26,10 @@ class Board {
         }
     }
 
+    public function isValidCoordinate(row:Int, col:Int):Bool {
+        return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
+    }
+
     public function getCellColor(row:Int, col:Int):CellColor {
         validateCoordinate(row, col);
         return cellColors[row][col];
@@ -57,7 +61,9 @@ class Board {
             buffer.add("\n");
 
             for (c in 0...NUM_COLS) {
-                buffer.add(cellColors[r][c].getName().charAt(0).toLowerCase());
+                var chr = cellColors[r][c].getName().charAt(0).toLowerCase();
+                if (cellColors[r][c] == CellColor.Empty) chr = '-';
+                buffer.add(chr);
             }
         }
         return buffer.toString();
@@ -128,8 +134,8 @@ class Board {
                     cellColors[r][c] = CellColor.Empty;
                     
                     onCellMoved.notify({
-                        from: { row: r, col: c },
-                        to: { row: r + numCollapsed, col: c },
+                        from:   { row: r, col: c },
+                        to:     { row: r + numCollapsed, col: c },
                     });
                 }
             }
@@ -142,9 +148,17 @@ class Board {
                 numEmptyCols++;
             } else if (numEmptyCols > 0) {
                 // Shift left
-                for (r in 0...NUM_ROWS) {
+                for (rTopdown in 0...NUM_ROWS) {
+                    var r = NUM_ROWS - rTopdown - 1;
+                    if (cellColors[r][c] == CellColor.Empty) break;
+
                     cellColors[r][c - numEmptyCols] = cellColors[r][c];
                     cellColors[r][c] = CellColor.Empty;
+
+                    onCellMoved.notify({
+                        from:   { row: r, col: c },
+                        to:     { row: r, col: c - numEmptyCols },
+                    });
                 }
             }
         }
@@ -156,9 +170,5 @@ class Board {
 
     function validateCoordinate(row:Int, col:Int) {
         if (!isValidCoordinate(row, col)) throw 'Invalid board coordinate: $row, $col';
-    }
-
-    function isValidCoordinate(row:Int, col:Int):Bool {
-        return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
     }
 }
