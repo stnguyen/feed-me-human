@@ -19,7 +19,6 @@ class BoardSerializer {
         // Verify first
         // Exactly (NUM_ROWS * NUM_COLS) digits in range [CellColor.Empty, CellColor.UpperBound)
         var regexStr = '[${CellColor.Empty.getIndex()}-${CellColor.UpperBound.getIndex() - 1}]{${Board.NUM_ROWS * Board.NUM_COLS}}';
-        trace('regex: $regexStr');
         var regex = new EReg(regexStr, "");
         if (!regex.match(serializedBoard)) {
             trace('WARNING: Failed to deserialize due to invalid board string: $serializedBoard');

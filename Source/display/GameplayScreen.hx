@@ -41,7 +41,6 @@ class GameplayScreen extends Screen {
     }
 
     function handleMouseClick(event:MouseEvent) {
-        trace('handleMouseClick: ${event.stageX}, ${event.stageY}');
         var localX = event.stageX - boardSprite.x;
         var localY = event.stageY - boardSprite.y;
         var row = Math.floor((localY / fullBoardHeight) * Board.NUM_ROWS);
