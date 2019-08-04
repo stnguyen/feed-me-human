@@ -25,6 +25,12 @@ class Board {
             cellColors[r] = new Vector(NUM_COLS);
         }
     }
+    
+    public function load(cellColors:Vector<Vector<CellColor>>) {
+        for (r in 0...NUM_ROWS) {
+            this.cellColors[r] = cellColors[r].copy();
+        }
+    }
 
     public function isValidCoordinate(row:Int, col:Int):Bool {
         return !(row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS);
