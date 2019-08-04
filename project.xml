@@ -11,7 +11,7 @@
 	<assets path="Assets" rename="assets" />
 
 	<window orientation="portrait" />
-	<window fullscreen="false" resizable="false" borderless="false" vsync="false" />
-	<window width="320" height="569" background="#FFFFFF" fps="30" />
+	<window fullscreen="false" resizable="true" borderless="false" vsync="false" />
+	<window width="640" height="1138" background="#FFFFFF" fps="30" />
 	
 </project>

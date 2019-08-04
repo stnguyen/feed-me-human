@@ -12,8 +12,6 @@ class GameplayScreen extends Screen {
 
     var board:Board;
     var boardSprite:BoardSprite;
-    var fullBoardWidth:Float;
-    var fullBoardHeight:Float;
 
     public function new() {
         super();
@@ -34,8 +32,6 @@ class GameplayScreen extends Screen {
         if (board == null) board = Board.random();
 
         boardSprite = createBoardSprite(board);
-        fullBoardWidth = boardSprite.width;
-        fullBoardHeight = boardSprite.height;
         
         addEventListener(MouseEvent.CLICK, handleMouseClick);
     }
@@ -43,8 +39,8 @@ class GameplayScreen extends Screen {
     function handleMouseClick(event:MouseEvent) {
         var localX = event.stageX - boardSprite.x;
         var localY = event.stageY - boardSprite.y;
-        var row = Math.floor((localY / fullBoardHeight) * Board.NUM_ROWS);
-        var col = Math.floor((localX / fullBoardWidth) * Board.NUM_COLS);
+        var row = Math.floor((localY / boardSprite.fullHeight) * Board.NUM_ROWS);
+        var col = Math.floor((localX / boardSprite.fullWidth) * Board.NUM_COLS);
         if (board.isValidCoordinate(row, col)) {
             if (board.tryBlast(row, col)) {
                 trace('board: $board');
@@ -64,15 +60,15 @@ class GameplayScreen extends Screen {
     function createCat() {
         var bitmap = new Bitmap(Assets.getBitmapData("assets/cat.png"));
         bitmap.x = (stage.stageWidth - bitmap.width) / 2;
-        bitmap.y = 30;
+        bitmap.y = 60;
         addChild(bitmap);
     }
 
     function createBoardSprite(board:Board):BoardSprite {
         var boardSprite = new BoardSprite(board);
-        boardSprite.scaleX = boardSprite.scaleY = BOARD_WIDTH_COVERAGE * stage.stageWidth / boardSprite.width;
-        boardSprite.x = (stage.stageWidth - boardSprite.width) / 2;
-        boardSprite.y = stage.stageHeight - boardSprite.height;
+        boardSprite.scaleX = boardSprite.scaleY = BOARD_WIDTH_COVERAGE * stage.stageWidth / boardSprite.fullWidth;
+        boardSprite.x = (stage.stageWidth - boardSprite.fullWidth) / 2;
+        boardSprite.y = stage.stageHeight - boardSprite.fullHeight;
         addChild(boardSprite);
         return boardSprite;
     }
@@ -86,8 +82,8 @@ class GameplayScreen extends Screen {
         down.alpha = 0.7;
 
         var button = new SimpleButton(up, over, down, up);
-        button.x = 5;
-        button.y = 5;
+        button.x = 10;
+        button.y = 10;
         button.addEventListener(MouseEvent.CLICK, handleExitClicked);
         addChild(button);
     }

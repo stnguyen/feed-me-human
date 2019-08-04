@@ -6,6 +6,12 @@ import openfl.Assets;
 import haxe.ds.Vector;
 
 class BoardSprite extends Sprite {
+    public var fullWidth(get, never):Float;
+    public var fullHeight(get, never):Float;
+
+    public var cellSpriteWidth:Float;
+    public var cellSpriteHeight:Float;
+    
     var board:Board;
     var cells:Vector<Vector<Bitmap>>;
 
@@ -15,6 +21,11 @@ class BoardSprite extends Sprite {
         
         board.onCellRemoved.addObserver(handleCellRemoved);
         board.onCellMoved.addObserver(handleCellMoved);
+
+        // Read a cell asset file to measure cell size
+        var cellBitmapData = Assets.getBitmapData(cellFileName(CellColor.Blue));
+        cellSpriteWidth = cellBitmapData.width;
+        cellSpriteHeight = cellBitmapData.height;
 
         createCells();
     }
@@ -54,5 +65,13 @@ class BoardSprite extends Sprite {
         bitmap.y = bitmap.height * movement.to.row;
         cells[movement.to.row][movement.to.col] = bitmap;
         cells[movement.from.row][movement.from.col] = null;
+    }
+    
+    function get_fullWidth() {
+        return cellSpriteWidth * Board.NUM_COLS * scaleX;
+    }
+    
+    function get_fullHeight() {
+        return cellSpriteHeight * Board.NUM_ROWS * scaleY;
     }
 }

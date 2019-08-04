@@ -2,7 +2,6 @@ package;
 
 import openfl.display.Sprite;
 import managers.*;
-import display.MainMenuScreen;
 import persistence.SharedObjectStorage;
 
 class Main extends Sprite {

@@ -29,7 +29,7 @@ class MainMenuScreen extends Screen {
     function createBackground() {
         var bitmap = new Bitmap(Assets.getBitmapData("assets/mainmenu-background.jpg"));
         bitmap.x = (stage.stageWidth - bitmap.width) / 2;
-        bitmap.y = 0;
+        bitmap.y = (stage.stageHeight - bitmap.height) / 2;
         addChild(bitmap);
     }
     
@@ -63,7 +63,7 @@ class MainMenuScreen extends Screen {
 
         var button = new SimpleButton(up, over, down, up);
         button.x = (stage.stageWidth - button.width) / 2;
-        button.y = (stage.stageHeight - button.height) / 2 - 40;
+        button.y = (stage.stageHeight - button.height) / 2 - button.height - 4;
         button.addEventListener(MouseEvent.CLICK, handleResumeClicked);
         addChild(button);
     }
