@@ -13,9 +13,12 @@ class Main extends Sprite {
     var boardSprite:BoardSprite;
     var fullBoardWidth:Float;
     var fullBoardHeight:Float;
+    var storage:IStorage;
 
     public function new() {
         super();
+        
+        storage = new LocalStorage();
 
         createBackground();
         createCat();
@@ -24,7 +27,9 @@ class Main extends Sprite {
     }
     
     function startGame() {
-        board = Board.random();
+        board = storage.getSavedBoard();
+        if (board == null) board = Board.random();
+
         boardSprite = createBoardSprite(board);
         fullBoardWidth = boardSprite.width;
         fullBoardHeight = boardSprite.height;
@@ -41,6 +46,7 @@ class Main extends Sprite {
         if (board.isValidCoordinate(row, col)) {
             if (board.tryBlast(row, col)) {
                 trace('board: $board');
+                storage.saveBoard(board);
             }
         }
     }
