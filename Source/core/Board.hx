@@ -73,7 +73,7 @@ class Board {
         var board = new Board();
 
         var lowerBound = CellColor.Empty.getIndex() + 1;
-        var upperBound = CellColor.UpperBound.getIndex() - 1;
+        var upperBound = CellColor.UpperBound.getIndex();
         var randRange = upperBound - lowerBound;
         for (r in 0...NUM_ROWS) {
             for (c in 0...NUM_COLS) {
