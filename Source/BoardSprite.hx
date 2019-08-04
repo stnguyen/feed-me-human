@@ -26,8 +26,8 @@ class BoardSprite extends Sprite {
                 var color = board.getCellColor(r, c);
                 var bitmap = color == CellColor.Empty ? new Bitmap() : new Bitmap(Assets.getBitmapData(cellFileName(color)));
                 bitmap.smoothing = true;
-                bitmap.x = bitmap.width * r;
-                bitmap.y = bitmap.height * c;
+                bitmap.x = bitmap.width * c;
+                bitmap.y = bitmap.height * r;
                 addChild(bitmap);
 
                 cells[r][c] = bitmap;
