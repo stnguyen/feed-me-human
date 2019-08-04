@@ -2,15 +2,15 @@
 
 ![Happy Cat](/Assets/cat.png)
 
-A simple tap-to-blast game, written as a practice to learn [Haxe](haxe.org) and [OpenFL](openfl.org).
+A simple tap-to-blast game, written as a practice to learn [Haxe](http://haxe.org) and [OpenFL](http://openfl.org).
 
 Its rules are copied from the (chinese?) puzzle game "PopStar!" (couldn't figure out which link is the original one).
 
-All assets belong to [me](stnguyen.com).
+All assets belong to [me](http://stnguyen.com).
 
 ## Demo
 
-[Play HTML5 version](stnguyen.com/feedmehuman/)
+[Play HTML5 version](http://stnguyen.com/feedmehuman/)
 
 ## Features
 
