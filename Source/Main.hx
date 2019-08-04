@@ -6,11 +6,12 @@ import openfl.Assets;
 import core.*;
 
 class Main extends Sprite {
+    static var BOARD_WIDTH_COVERAGE = 0.99;
+
     var board:Board;
     var boardSprite:BoardSprite;
     var fullBoardWidth:Float;
     var fullBoardHeight:Float;
-    var BOARD_WIDTH_COVERAGE = 0.99;
 
     public function new() {
         super();
