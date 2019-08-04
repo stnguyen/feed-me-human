@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="FeedMeHuman" package="com.sample.feedmehuman" version="1.0.0" company="Company Name" />
+	<meta title="Feed Me Human" package="com.stnguyen.feedmehuman" version="1.0.0" company="Stefan Nguyen" />
 	<app main="Main" path="Export" file="FeedMeHuman" />
 	
 	<source path="Source" />
@@ -12,6 +12,6 @@
 
 	<window orientation="portrait" />
 	<window fullscreen="false" resizable="false" borderless="false" vsync="false" />
-	<window width="320" height="569" background="#FFFFFF" fps="60" />
+	<window width="320" height="569" background="#FFFFFF" fps="30" />
 	
 </project>
