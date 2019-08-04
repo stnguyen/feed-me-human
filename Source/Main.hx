@@ -14,7 +14,10 @@ class Main extends Sprite {
 
     public function new() {
         super();
+
         createBackground();
+        createCat();
+
         startGame();
     }
     
@@ -45,6 +48,13 @@ class Main extends Sprite {
         var bitmap = new Bitmap(Assets.getBitmapData("assets/" + fileName));
         bitmap.x = (stage.stageWidth - bitmap.width) / 2;
         bitmap.y = 0;
+        addChild(bitmap);
+    }
+
+    function createCat() {
+        var bitmap = new Bitmap(Assets.getBitmapData("assets/cat.png"));
+        bitmap.x = (stage.stageWidth - bitmap.width) / 2;
+        bitmap.y = 30;
         addChild(bitmap);
     }
 
