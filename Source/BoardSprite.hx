@@ -18,10 +18,10 @@ class BoardSprite extends Sprite {
 
     function createCells() {
         cells = new Vector(Board.NumRows);
-        for (r in 0...Board.NumRows - 1) {
+        for (r in 0...Board.NumRows) {
             cells[r] = new Vector(Board.NumCols);
 
-            for (c in 0...Board.NumCols - 1) {
+            for (c in 0...Board.NumCols) {
                 // TODO use pools
                 var color = board.getCellColor(r, c);
                 var bitmap = color == CellColor.Empty ? new Bitmap() : new Bitmap(Assets.getBitmapData(cellFileName(color)));

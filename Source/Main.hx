@@ -17,7 +17,7 @@ class Main extends Sprite {
         var fileName = level % 2 == 0 ? "day-background.jpg" : "night-background.jpg";
         var bitmap = new Bitmap(Assets.getBitmapData("assets/" + fileName));
         bitmap.x = (stage.stageWidth - bitmap.width) / 2;
-        bitmap.y = (stage.stageHeight - bitmap.height) / 2;
+        bitmap.y = 0;
         addChild(bitmap);
     }
 
@@ -25,9 +25,12 @@ class Main extends Sprite {
         var board = Board.random();
         trace('randomized board: $board');
         var boardSprite = new BoardSprite(board);
-        boardSprite.scaleX = boardSprite.scaleY = 0.98 * stage.stageWidth / boardSprite.width;
+        boardSprite.scaleX = boardSprite.scaleY = 0.99 * stage.stageWidth / boardSprite.width;
         boardSprite.x = (stage.stageWidth - boardSprite.width) / 2;
         boardSprite.y = stage.stageHeight - boardSprite.height;
         addChild(boardSprite);
+
+        board.tryBlast(3, 3);
+        trace('collapsed board: $board');
     }
 }

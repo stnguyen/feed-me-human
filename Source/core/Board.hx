@@ -3,9 +3,16 @@ package core;
 import haxe.ds.Vector;
 
 typedef Coordinate = { row:Int, col:Int }
+
+/**
+    Board state
+
+    Coordinates increase from top left (0, 0) to bottom right (NumRows, NumCols)
+**/
 class Board {
     public static inline var NumRows = 10;
     public static inline var NumCols = 10;
+    public static inline var CoordinateHashRowMultiplier = 100;
 
     static var NeighborCoordinateDeltas = [ [0,1], [0,-1], [1, 0], [-1, 0] ];
     
@@ -13,7 +20,7 @@ class Board {
 
     public function new() {
         cellColors = new Vector(NumRows);
-        for (r in 0...NumRows - 1) {
+        for (r in 0...NumRows) {
             cellColors[r] = new Vector(NumCols);
         }
     }
@@ -24,19 +31,31 @@ class Board {
     }
 
     public function tryBlast(row:Int, col:Int):Bool {
-        var connectedCells = floodFill(row, col);
-        trace('tryBlast($row, $col): color is ${getCellColor(row, col)}, connected cells: $connectedCells');
-        if (connectedCells.length < 2) return false;
+        validateCoordinate(row, col);
+
+        var blastingCoors = floodFill(row, col);
+        trace('tryBlast($row, $col): color is ${cellColors[row][col]}, blasting: ${blastingCoors}');
+        
+        if (blastingCoors.length < 2) return false;
+
+        var blastingCoorLookup = new Map<Int, Bool>();
+        for (coor in blastingCoors) {
+            // TODO notify removal
+            blastingCoorLookup.set(hashCoordinate(coor.row, coor.col), true);
+        }
+
+        collapse(blastingCoorLookup);
+
         return true;
     }
-
+    
     public function toString():String {
         var buffer = new StringBuf();
-        for (r in 0...NumRows - 1) {
+        for (r in 0...NumRows) {
             // Always put a new line on top to avoid breaking layout
             buffer.add("\n");
 
-            for (c in 0...NumCols - 1) {
+            for (c in 0...NumCols) {
                 buffer.add(cellColors[r][c].getName().charAt(0).toLowerCase());
             }
         }
@@ -49,8 +68,8 @@ class Board {
         var lowerBound = CellColor.Empty.getIndex() + 1;
         var upperBound = CellColor.UpperBound.getIndex() - 1;
         var randRange = upperBound - lowerBound;
-        for (r in 0...NumRows - 1) {
-            for (c in 0...NumCols - 1) {
+        for (r in 0...NumRows) {
+            for (c in 0...NumCols) {
                 var randIndex = lowerBound + Std.random(randRange);
                 board.cellColors[r][c] = CellColor.createByIndex(randIndex);
             }
@@ -66,8 +85,9 @@ class Board {
         return !(row < 0 || row >= NumRows || col < 0 || col >= NumCols);
     }
 
+    /** Find connected (same color) cells with the given cell coordinate **/
     function floodFill(row:Int, col:Int):Array<Coordinate> {
-        var color = getCellColor(row, col);
+        var color = cellColors[row][col];
         var connectedCoors = new Array<Coordinate>();
         var processingCoors = new Array<Coordinate>();
         // A Set would be more optimal, but it's not built-in
@@ -79,7 +99,7 @@ class Board {
 
         while (processingCoors.length > 0) {
             var coor = processingCoors.pop();
-            if (color == getCellColor(coor.row, coor.col)) {
+            if (color == cellColors[coor.row][coor.col]) {
                 connectedCoors.push(coor);
                 
                 // Check surrounding cells
@@ -97,7 +117,43 @@ class Board {
         return connectedCoors;
     }
     
+    /** Collapse the board, remove empty columns (shift left), in linear time **/
+    function collapse(blastingCoorLookup:Map<Int, Bool>) {
+        // First, collapse down
+        for (c in 0...NumCols) {
+            var numCollapsed = 0;
+            for (rTopdown in 0...NumRows) {
+                var r = NumRows - rTopdown - 1;
+
+                if (cellColors[r][c] == CellColor.Empty) break;
+
+                if (blastingCoorLookup.exists(hashCoordinate(r, c))) {
+                    numCollapsed++;
+                    cellColors[r][c] = CellColor.Empty;
+                } else if (numCollapsed > 0) {
+                    // TODO notify cell movement
+                    cellColors[r + numCollapsed][c] = cellColors[r][c];
+                    cellColors[r][c] = CellColor.Empty;
+                }
+            }
+        }
+        
+        // Then, if there are empty columns, collapse to the left
+        var numEmptyCols = 0;
+        for (c in 0...NumCols) {
+            if (cellColors[NumRows - 1][c] == CellColor.Empty) {
+                numEmptyCols++;
+            } else if (numEmptyCols > 0) {
+                // Shift left
+                for (r in 0...NumRows) {
+                    cellColors[r][c - numEmptyCols] = cellColors[r][c];
+                    cellColors[r][c] = CellColor.Empty;
+                }
+            }
+        }
+    }
+
     function hashCoordinate(row:Int, col:Int):Int {
-        return row * 100 + col;
+        return row * CoordinateHashRowMultiplier + col;
     }
 }
