@@ -10,7 +10,7 @@ All assets belong to [me](http://stnguyen.com).
 
 ## Demo
 
-[Play HTML5 version](http://stnguyen.com/feedmehuman/)
+[Play HTML5 version](http://stnguyen.github.io/feedmehuman/)
 
 ## Features
 
