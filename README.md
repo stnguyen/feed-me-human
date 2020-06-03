@@ -6,7 +6,7 @@ A simple tap-to-blast game, written as a practice to learn [Haxe](http://haxe.or
 
 Its rules are copied from the (chinese?) puzzle game "PopStar!" (couldn't figure out which link is the original one).
 
-All assets belong to [me](http://stnguyen.com).
+All assets belong to [me](http://stnguyen.github.io/).
 
 ## Demo
 
